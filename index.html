@@ -1,190 +1,532 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapThumb | Professional YouTube Thumbnail Downloader</title>
+    <meta name="description" content="Download high-quality YouTube thumbnails for free. Supports 4K, HD, and Shorts. No registration required.">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #FF0000;
+            --primary-hover: #CC0000;
+            --bg: #F9FAFB;
+            --card-bg: #FFFFFF;
+            --text-main: #111827;
+            --text-muted: #6B7280;
+            --border: #E5E7EB;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
 
-  <!-- SEO -->
-  <title>YouTube Thumbnail Downloader | Free & Fast</title>
-  <meta name="description" content="Download YouTube video thumbnails in all resolutions. Supports videos, Shorts, and more. 100% free and no login required.">
-  <meta name="keywords" content="youtube thumbnail downloader, youtube thumbnail download, youtube shorts thumbnail, free youtube tools">
-  <meta name="author" content="Jaeyoung">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="YouTube Thumbnail Downloader">
-  <meta property="og:description" content="Extract YouTube thumbnails instantly in multiple resolutions. Free & easy.">
-  <meta property="og:type" content="website">
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
 
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
+        /* Navbar */
+        nav {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        .nav-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-  <!-- AdSense (승인 후 ca-pub 교체) -->
-  <!--
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXX"
-    crossorigin="anonymous"></script>
-  -->
+        .logo {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
 
-  <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      padding: 20px;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      min-height: 100vh;
-    }
-    .container {
-      max-width: 900px;
-      margin: auto;
-      background: white;
-      border-radius: 16px;
-      padding: 32px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.3);
-    }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    select {
-      padding: 6px;
-      border-radius: 6px;
-    }
-    .ad {
-      margin: 24px 0;
-      padding: 16px;
-      background: #f4f4f4;
-      text-align: center;
-      border-radius: 8px;
-      font-size: 14px;
-      color: #777;
-    }
-    input, button {
-      width: 100%;
-      padding: 14px;
-      font-size: 16px;
-      margin-top: 10px;
-    }
-    button {
-      background: #667eea;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .thumb {
-      margin-top: 20px;
-    }
-    img {
-      width: 100%;
-      border-radius: 8px;
-    }
-  </style>
+        .lang-select {
+            padding: 0.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-size: 0.875rem;
+            background: white;
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 1rem;
+            text-align: center;
+            background: linear-gradient(to bottom, #ffffff, var(--bg));
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #111827, #374151);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+        }
+
+        /* Input Area */
+        .search-container {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            background: white;
+            padding: 8px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            display: flex;
+            gap: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .search-container input {
+            flex: 1;
+            border: none;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            outline: none;
+            border-radius: 12px;
+        }
+
+        .search-container button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .search-container button:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        /* Results Area */
+        #result-area {
+            max-width: 1100px;
+            margin: 3rem auto;
+            padding: 0 1rem;
+            display: none;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .thumb-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .thumb-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .thumb-card img {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            background: #eee;
+        }
+
+        .card-content {
+            padding: 1.25rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .resolution-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #F3F4F6;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Button Layout Enhancement */
+        .button-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 1rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border: none;
+            padding: 0.75rem 0.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .download-btn {
+            background: var(--text-main);
+            color: white;
+        }
+
+        .copy-btn {
+            background: #F3F4F6;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+        }
+
+        .action-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .action-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Features Section */
+        .features {
+            max-width: 1100px;
+            margin: 5rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-item {
+            text-align: center;
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: #FFEBEB;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: var(--primary);
+        }
+
+        .feature-item h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-item p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Notification Toast */
+        #toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1F2937;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 99px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        /* Ad Sections */
+        .ad-placeholder {
+            margin: 2rem auto;
+            max-width: 1100px;
+            height: 100px;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 0.8rem;
+            border-radius: 8px;
+            border: 1px dashed #ccc;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .features { grid-template-columns: 1fr; }
+            .search-container { flex-direction: column; padding: 16px; border-radius: 20px; }
+            .search-container button { padding: 1rem; }
+            .button-group { flex-direction: column; }
+        }
+    </style>
 </head>
-
 <body>
-<div class="container">
 
-<header>
-  <h1 data-i18n="title">YouTube Thumbnail Downloader</h1>
-  <select id="langSelect">
-    <option value="en">EN</option>
-    <option value="ko">KO</option>
-  </select>
-</header>
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                SnapThumb
+            </a>
+            <select id="langSelect" class="lang-select">
+                <option value="en">English (US)</option>
+                <option value="ko">한국어 (Korean)</option>
+            </select>
+        </div>
+    </nav>
 
-<p data-i18n="subtitle">
-  Download YouTube thumbnails in all resolutions instantly.
-</p>
+    <section class="hero">
+        <h1 data-i18n="title">YouTube Thumbnail Downloader</h1>
+        <p data-i18n="subtitle">Download high-quality thumbnails from any YouTube video instantly.</p>
+        
+        <div class="search-container">
+            <input type="text" id="videoUrl" placeholder="Paste YouTube link here...">
+            <button onclick="processRequest()" data-i18n="button">Get Thumbnails</button>
+        </div>
+    </section>
 
-<!-- AdSense Top -->
-<div class="ad">AdSense Top Banner</div>
+    <div class="ad-placeholder">Advertisement Space</div>
 
-<input id="url" placeholder="Paste YouTube URL or Video ID">
-<button onclick="getThumb()" data-i18n="button">Get Thumbnail</button>
+    <section id="result-area">
+        <div class="result-grid" id="resultGrid"></div>
+    </section>
 
-<div id="result"></div>
+    <section class="features">
+        <div class="feature-item">
+            <div class="feature-icon">⚡</div>
+            <h3 data-i18n="f1_title">Instant Download</h3>
+            <p data-i18n="f1_desc">Get your thumbnails in milliseconds.</p>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">💎</div>
+            <h3 data-i18n="f2_title">Maximum Quality</h3>
+            <p data-i18n="f2_desc">Download original HD images directly.</p>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">🔒</div>
+            <h3 data-i18n="f3_title">Privacy First</h3>
+            <p data-i18n="f3_desc">No tracking, no login required.</p>
+        </div>
+    </section>
 
-<!-- AdSense Middle -->
-<div class="ad">AdSense In-Content</div>
+    <div class="ad-placeholder">Advertisement Space</div>
 
-<footer style="margin-top:30px; font-size:13px; color:#666;">
-  <p data-i18n="footer">
-    This tool is for personal use only. All rights belong to the original creators.
-  </p>
-</footer>
+    <footer style="background: white; padding: 4rem 1rem; border-top: 1px solid var(--border); text-align: center;">
+        <p style="color: var(--text-muted); font-size: 0.875rem;" data-i18n="footer">
+            © 2024 SnapThumb. For personal use only.
+        </p>
+    </footer>
 
-<!-- AdSense Bottom -->
-<div class="ad">AdSense Footer</div>
+    <div id="toast"></div>
 
-</div>
+    <script>
+        const translations = {
+            en: {
+                title: "YouTube Thumbnail Downloader",
+                subtitle: "The fastest and most reliable way to extract high-quality thumbnails from any YouTube video.",
+                button: "Get Thumbnails",
+                f1_title: "Instant Download",
+                f1_desc: "Get your thumbnails in milliseconds. No waiting, no processing time.",
+                f2_title: "Maximum Quality",
+                f2_desc: "Download original HD (1280x720) images directly from YouTube servers.",
+                f3_title: "Privacy First",
+                f3_desc: "We don't track your downloads or require any login information.",
+                footer: "© 2024 SnapThumb. For personal use only. All content rights belong to original creators.",
+                invalid: "Please enter a valid YouTube URL or Video ID.",
+                resolutions: {
+                    max: "HD Quality (1280x720)",
+                    hq: "High Quality (480x360)",
+                    mq: "Medium Quality (320x180)",
+                    sd: "Standard Quality (640x480)"
+                },
+                download: "Download",
+                copy: "Copy URL",
+                copied: "URL copied to clipboard!"
+            },
+            ko: {
+                title: "유튜브 썸네일 다운로더",
+                subtitle: "모든 유튜브 영상의 썸네일을 고화질로 가장 빠르고 안전하게 추출하세요.",
+                button: "썸네일 가져오기",
+                f1_title: "즉시 다운로드",
+                f1_desc: "대기 시간이나 처리 과정 없이 즉시 썸네일을 가져옵니다.",
+                f2_title: "최고 화질 보장",
+                f2_desc: "유튜브 서버에서 직접 원본 HD (1280x720) 이미지를 다운로드합니다.",
+                f3_title: "개인정보 보호",
+                f3_desc: "어떠한 다운로드 기록도 추적하지 않으며 로그인이 필요하지 않습니다.",
+                footer: "© 2024 SnapThumb. 개인적인 용도로만 사용하십시오. 모든 권리는 원작자에게 있습니다.",
+                invalid: "올바른 유튜브 주소나 영상 ID를 입력해 주세요.",
+                resolutions: {
+                    max: "최고 화질 (1280x720)",
+                    hq: "고화질 (480x360)",
+                    mq: "중간 화질 (320x180)",
+                    sd: "표준 화질 (640x480)"
+                },
+                download: "다운로드",
+                copy: "주소 복사",
+                copied: "주소가 복사되었습니다!"
+            }
+        };
 
-<script>
-/* ======================
-   i18n
-====================== */
-const texts = {
-  en: {
-    title: "YouTube Thumbnail Downloader",
-    subtitle: "Download YouTube thumbnails in all resolutions instantly.",
-    button: "Get Thumbnail",
-    footer: "This tool is for personal use only. All rights belong to the original creators."
-  },
-  ko: {
-    title: "유튜브 썸네일 다운로더",
-    subtitle: "유튜브 동영상 썸네일을 모든 해상도로 즉시 다운로드하세요.",
-    button: "썸네일 가져오기",
-    footer: "본 도구는 개인 사용 목적이며, 모든 권리는 원작자에게 있습니다."
-  }
-};
+        const langSelect = document.getElementById('langSelect');
+        let currentLang = 'en';
 
-const langSelect = document.getElementById("langSelect");
+        function updateLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) el.textContent = translations[lang][key];
+            });
+            localStorage.setItem('pref_lang', lang);
+        }
 
-function setLanguage(lang) {
-  document.documentElement.lang = lang;
-  document.querySelectorAll("[data-i18n]").forEach(el => {
-    el.textContent = texts[lang][el.dataset.i18n];
-  });
-  localStorage.setItem("lang", lang);
-}
+        langSelect.addEventListener('change', (e) => updateLanguage(e.target.value));
+        const savedLang = localStorage.getItem('pref_lang') || (navigator.language.startsWith('ko') ? 'ko' : 'en');
+        langSelect.value = savedLang;
+        updateLanguage(savedLang);
 
-const savedLang = localStorage.getItem("lang");
-const browserLang = navigator.language.startsWith("ko") ? "ko" : "en";
-setLanguage(savedLang || browserLang);
-langSelect.value = savedLang || browserLang;
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.style.transform = 'translateX(-50%) translateY(0)';
+            setTimeout(() => toast.style.transform = 'translateX(-50%) translateY(100px)', 3000);
+        }
 
-langSelect.addEventListener("change", e => {
-  setLanguage(e.target.value);
-});
+        function extractVideoId(input) {
+            const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/;
+            const match = input.match(regex);
+            return (match && match[1]) || (/^[a-zA-Z0-9_-]{11}$/.test(input) ? input : null);
+        }
 
-/* ======================
-   Thumbnail Logic
-====================== */
-function getVideoId(input) {
-  try {
-    if (/^[\w-]{11}$/.test(input)) return input;
-    const url = new URL(input);
-    if (url.searchParams.get("v")) return url.searchParams.get("v");
-    if (url.pathname.includes("shorts"))
-      return url.pathname.split("/shorts/")[1];
-  } catch {}
-  return null;
-}
+        async function downloadImage(url, filename) {
+            try {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(blobUrl);
+            } catch (e) {
+                window.open(url, '_blank');
+                showToast(currentLang === 'ko' ? "새 탭에서 이미지를 열었습니다. 우클릭으로 저장해 주세요." : "Opened in new tab. Right-click to save.");
+            }
+        }
 
-function getThumb() {
-  const input = document.getElementById("url").value.trim();
-  const id = getVideoId(input);
-  if (!id) return alert("Invalid URL or ID");
+        function copyToClipboard(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToast(translations[currentLang].copied);
+            } catch (err) {
+                showToast("Failed to copy URL");
+            }
+            document.body.removeChild(textArea);
+        }
 
-  const img = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
-  document.getElementById("result").innerHTML = `
-    <div class="thumb">
-      <img src="${img}">
-      <p><a href="${img}" target="_blank">Open Image</a></p>
-    </div>
-  `;
-}
-</script>
+        function processRequest() {
+            const input = document.getElementById('videoUrl').value.trim();
+            const id = extractVideoId(input);
+            if (!id) return showToast(translations[currentLang].invalid);
+            renderThumbnails(id);
+        }
 
+        function renderThumbnails(id) {
+            const resultArea = document.getElementById('result-area');
+            const resultGrid = document.getElementById('resultGrid');
+            const res = translations[currentLang].resolutions;
+            const thumbTypes = [
+                { key: 'maxresdefault', label: res.max },
+                { key: 'sddefault', label: res.sd },
+                { key: 'hqdefault', label: res.hq },
+                { key: 'mqdefault', label: res.mq }
+            ];
+
+            resultGrid.innerHTML = '';
+            thumbTypes.forEach(type => {
+                const imgUrl = `https://img.youtube.com/vi/${id}/${type.key}.jpg`;
+                const card = document.createElement('div');
+                card.className = 'thumb-card';
+                card.innerHTML = `
+                    <img src="${imgUrl}" alt="${type.label}" onerror="this.parentElement.style.display='none'">
+                    <div class="card-content">
+                        <div>
+                            <span class="resolution-badge">${type.label}</span>
+                        </div>
+                        <div class="button-group">
+                            <button class="action-btn download-btn" onclick="downloadImage('${imgUrl}', 'yt_thumb_${id}_${type.key}.jpg')">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                ${translations[currentLang].download}
+                            </button>
+                            <button class="action-btn copy-btn" onclick="copyToClipboard('${imgUrl}')">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                                ${translations[currentLang].copy}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                resultGrid.appendChild(card);
+            });
+
+            resultArea.style.display = 'block';
+            resultArea.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.getElementById('videoUrl').addEventListener('keypress', (e) => e.key === 'Enter' && processRequest());
+    </script>
 </body>
 </html>
